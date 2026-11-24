@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+{% block title %}Browser History – WebFootprint Forensics{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h3 class="fw-bold text-white mb-1">
+            <i class="fas fa-globe text-primary me-2"></i>Browser History Artifact Analyzer
+        </h3>
+        <p class="text-secondary small mb-0">
+            Decoded browsing records, page titles, navigation transitions, and visit frequencies extracted across all evidence.
+        </p>
+    </div>
+    <div class="d-flex gap-2">
+        <a href="{{ url_for('export_csv_route', export_type='history') }}" class="btn btn-sm btn-forensic-outline">
+            <i class="fas fa-file-csv me-1"></i> Export History CSV
+        </a>
+    </div>
+</div>
+
+<!-- Filter Bar -->
+<div class="card-forensic mb-4">
+    <div class="card-body-forensic py-3">
+        <form method="GET" action="{{ url_for('history_page') }}" class="row g-2 align-items-center">
+            <div class="col-md-3">
+                <input type="text" name="q" class="form-control form-control-forensic" placeholder="Search URL or title..." value="{{ search_query }}">
+            </div>
+            <div class="col-md-2">
+                <select name="browser" class="form-select-forensic w-100">
+                    <option value="">All Browsers</option>
+                    <option value="Chrome" {% if browser_filter == 'Chrome' %}selected{% endif %}>Chrome / Edge</option>
+                    <option value="Firefox" {% if browser_filter == 'Firefox' %}selected{% endif %}>Firefox</option>
+                    <option value="CSV" {% if browser_filter == 'CSV' %}selected{% endif %}>CSV / Generic</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select name="classification" class="form-select-forensic w-100">
+                    <option value="">All Classifications</option>
+                    <option value="Normal" {% if class_filter == 'Normal' %}selected{% endif %}>Normal</option>
+                    <option value="Suspicious" {% if class_filter == 'Suspicious' %}selected{% endif %}>Suspicious</option>
+                    <option value="High Risk" {% if class_filter == 'High Risk' %}selected{% endif %}>High Risk</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <input type="date" name="date" class="form-control form-control-forensic" value="{{ date_filter }}" title="Filter by date">
+            </div>
+            <div class="col-md-3 d-flex gap-2">
+                <button type="submit" class="btn btn-sm btn-forensic-primary flex-grow-1">
+                    <i class="fas fa-filter me-1"></i> Apply Filter
+                </button>
+                <a href="{{ url_for('history_page') }}" class="btn btn-sm btn-forensic-outline">Reset</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- History Table -->
+<div class="card-forensic">
+    <div class="card-header-forensic">
+        <h6 class="card-title-forensic">
+            <i class="fas fa-table"></i> Extracted History Records (Showing {{ history_records|length }} of {{ total_count }})
+        </h6>
+        <div class="d-flex align-items-center gap-2">
+            <input type="text" class="form-control form-control-forensic table-search-input" data-table-id="historyTable" placeholder="Instant table search..." style="width: 200px;">
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-forensic mb-0" id="historyTable">
+            <thead>
+                <tr>
+                    <th>Domain / Host</th>
+                    <th>Page Title & URL</th>
+                    <th>Visits</th>
+                    <th>Typed</th>
+                    <th>Last Visited (UTC)</th>
+                    <th>Browser</th>
+                    <th>Transition</th>
+                    <th>Classification</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if history_records %}
+                    {% for h in history_records %}
+                        <tr>
+                            <td class="fw-semibold text-white">
+                                <i class="fas fa-globe-americas text-accent me-1"></i> {{ h.domain }}
+                            </td>
+                            <td>
+                                <div class="text-white small fw-bold text-truncate" style="max-width: 320px;" title="{{ h.page_title }}">
+                                    {{ h.page_title }}
+                                </div>
+                                <div class="url-truncate text-muted" style="max-width: 320px;" title="{{ h.url }}">
+                                    {{ h.url }}
+                                </div>
+                            </td>
+                            <td>
+                                <span class="badge bg-dark border border-secondary text-white">{{ h.visit_count }}</span>
+                            </td>
+                            <td>
+                                {% if h.typed_count > 0 %}
+                                    <span class="badge bg-dark border border-info text-info">{{ h.typed_count }}</span>
+                                {% else %}
+                                    <span class="text-muted">0</span>
+                                {% endif %}
+                            </td>
+                            <td><span class="text-secondary small font-monospace">{{ h.last_visit_time }}</span></td>
+                            <td>
+                                <span class="badge bg-dark border border-secondary text-secondary small">
+                                    {{ h.browser_type }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="text-muted small">{{ h.transition_type }}</span>
+                            </td>
+                            <td>
+                                {% if h.classification == 'High Risk' %}
+                                    <span class="badge-risk badge-risk-high"><i class="fas fa-skull-crossbones"></i> High Risk</span>
+                                {% elif h.classification == 'Suspicious' %}
+                                    <span class="badge-risk badge-risk-medium"><i class="fas fa-exclamation-triangle"></i> Suspicious</span>
+                                {% else %}
+                                    <span class="badge-risk badge-risk-normal"><i class="fas fa-shield-alt"></i> Normal</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="8" class="text-center py-5 text-muted">
+                            <i class="fas fa-search fs-2 mb-2 d-block"></i>
+                            No browser history records matching current filter criteria.
+                        </td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination Controls -->
+    {% if total_pages > 1 %}
+        <div class="card-footer bg-transparent border-top border-secondary py-3 d-flex justify-content-between align-items-center">
+            <span class="text-muted small">Page {{ current_page }} of {{ total_pages }}</span>
+            <ul class="pagination pagination-sm mb-0">
+                <li class="page-item {% if current_page <= 1 %}disabled{% endif %}">
+                    <a class="page-link bg-dark text-secondary border-secondary" href="{{ url_for('history_page', page=current_page-1, q=search_query, browser=browser_filter, classification=class_filter, date=date_filter) }}">Previous</a>
+                </li>
+                {% for p in range(1, total_pages + 1) %}
+                    {% if p >= current_page - 2 and p <= current_page + 2 %}
+                        <li class="page-item {% if p == current_page %}active{% endif %}">
+                            <a class="page-link {% if p == current_page %}bg-primary text-white border-primary{% else %}bg-dark text-secondary border-secondary{% endif %}" href="{{ url_for('history_page', page=p, q=search_query, browser=browser_filter, classification=class_filter, date=date_filter) }}">{{ p }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+                <li class="page-item {% if current_page >= total_pages %}disabled{% endif %}">
+                    <a class="page-link bg-dark text-secondary border-secondary" href="{{ url_for('history_page', page=current_page+1, q=search_query, browser=browser_filter, classification=class_filter, date=date_filter) }}">Next</a>
+                </li>
+            </ul>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

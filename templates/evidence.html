@@ -1,0 +1,191 @@
+{% extends "base.html" %}
+{% block title %}Evidence Acquisition – WebFootprint Forensics{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h3 class="fw-bold text-white mb-1">
+            <i class="fas fa-database text-accent me-2"></i>Evidence Acquisition & Ingestion
+        </h3>
+        <p class="text-secondary small mb-0">
+            Securely upload, hash, validate, and preserve browser database and export files under forensic custody.
+        </p>
+    </div>
+    <div class="d-flex gap-2">
+        <form action="{{ url_for('load_demo_route') }}" method="POST" class="d-inline">
+            <button type="submit" class="btn btn-sm btn-forensic-accent">
+                <i class="fas fa-magic me-1"></i> Ingest Sample Evidence
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- Upload Box & Metadata Card -->
+<div class="row g-4 mb-4">
+    <div class="col-lg-6">
+        <div class="card-forensic h-100">
+            <div class="card-header-forensic">
+                <h6 class="card-title-forensic">
+                    <i class="fas fa-file-upload"></i> Upload Evidence File
+                </h6>
+                <span class="badge bg-dark border border-secondary text-secondary small">SHA-256 Auto-Hashing</span>
+            </div>
+            <div class="card-body-forensic">
+                <form action="{{ url_for('upload_evidence') }}" method="POST" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label class="form-label text-secondary small fw-bold">Select Evidence Artifact *</label>
+                        <input type="file" name="evidence_file" class="form-control form-control-forensic" required>
+                        <div class="form-text text-muted" style="font-size: 0.72rem;">
+                            Accepted formats: SQLite databases (<code>History</code>, <code>places.sqlite</code>, <code>.db</code>), <code>.csv</code>, <code>.json</code> (Max 150MB).
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-secondary small fw-bold">Acquisition Source / Chain Reference *</label>
+                        <input type="text" name="acquisition_source" class="form-control form-control-forensic" placeholder="e.g. Workstation Dell OptiPlex SN#98412 - C:\Users\Admin\..." required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-secondary small fw-bold">Acquiring Examiner / Badge</label>
+                        <input type="text" name="uploaded_by" class="form-control form-control-forensic" value="{{ current_investigator.name if current_investigator else 'Det. S. Vance' }}">
+                    </div>
+
+                    <div class="alert alert-info py-2 small mb-3" style="background: rgba(6, 182, 212, 0.08); border-color: rgba(6, 182, 212, 0.25); color: var(--text-primary);">
+                        <i class="fas fa-lock text-accent me-1"></i> <strong>Forensic Preservation Guarantee:</strong> The original uploaded evidence file is stored in a secure read-only container and never altered during parsing.
+                    </div>
+
+                    <button type="submit" class="btn btn-forensic-primary w-100">
+                        <i class="fas fa-fingerprint me-1"></i> Ingest & Compute Cryptographic Hash
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="card-forensic h-100">
+            <div class="card-header-forensic">
+                <h6 class="card-title-forensic">
+                    <i class="fas fa-info-circle"></i> Supported Forensic Database Schemas
+                </h6>
+            </div>
+            <div class="card-body-forensic">
+                <div class="d-flex flex-column gap-3">
+                    <div class="p-3 rounded border border-secondary" style="background: rgba(17, 24, 39, 0.4);">
+                        <div class="d-flex align-items-center gap-2 mb-1">
+                            <i class="fab fa-chrome text-warning fs-5"></i>
+                            <strong class="text-white">Google Chrome & Microsoft Edge (Chromium)</strong>
+                        </div>
+                        <p class="text-secondary small mb-1">
+                            Analyzes the Chromium <code>History</code> SQLite file. Extracts <code>urls</code>, <code>visits</code>, and <code>downloads</code> tables with WebKit 1601 UTC microsecond conversion.
+                        </p>
+                        <span class="badge bg-dark border border-secondary text-muted">File: History</span>
+                    </div>
+
+                    <div class="p-3 rounded border border-secondary" style="background: rgba(17, 24, 39, 0.4);">
+                        <div class="d-flex align-items-center gap-2 mb-1">
+                            <i class="fab fa-firefox-browser text-danger fs-5"></i>
+                            <strong class="text-white">Mozilla Firefox</strong>
+                        </div>
+                        <p class="text-secondary small mb-1">
+                            Analyzes the Gecko <code>places.sqlite</code> database. Extracts <code>moz_places</code>, <code>moz_historyvisits</code>, and download annotations with PRTime 1970 UTC microsecond conversion.
+                        </p>
+                        <span class="badge bg-dark border border-secondary text-muted">File: places.sqlite</span>
+                    </div>
+
+                    <div class="p-3 rounded border border-secondary" style="background: rgba(17, 24, 39, 0.4);">
+                        <div class="d-flex align-items-center gap-2 mb-1">
+                            <i class="fas fa-file-csv text-success fs-5"></i>
+                            <strong class="text-white">CSV & JSON Forensic Exports</strong>
+                        </div>
+                        <p class="text-secondary small mb-1">
+                            Supports standardized tabular history and download exports from forensic triage collectors (e.g. FTK, EnCase, NirSoft).
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Ingested Evidence Table -->
+<div class="card-forensic">
+    <div class="card-header-forensic">
+        <h6 class="card-title-forensic">
+            <i class="fas fa-archive"></i> Evidence Ingestion Register ({{ evidence_list|length }} Artifacts)
+        </h6>
+        <div class="d-flex gap-2">
+            <input type="text" class="form-control form-control-forensic table-search-input" data-table-id="evidenceTable" placeholder="Filter evidence..." style="width: 200px;">
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-forensic mb-0" id="evidenceTable">
+            <thead>
+                <tr>
+                    <th>Evidence ID</th>
+                    <th>Filename</th>
+                    <th>Size</th>
+                    <th>Detected Architecture</th>
+                    <th>SHA-256 Digest</th>
+                    <th>Acquisition Source</th>
+                    <th>Status</th>
+                    <th>Records</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if evidence_list %}
+                    {% for ev in evidence_list %}
+                        <tr>
+                            <td><span class="badge bg-dark border border-primary text-primary fw-bold">{{ ev.id }}</span></td>
+                            <td class="fw-semibold text-white">
+                                <i class="fas fa-file-code text-accent me-1"></i> {{ ev.original_filename }}
+                            </td>
+                            <td><span class="text-secondary small">{{ (ev.file_size / 1024)|round(1) }} KB</span></td>
+                            <td>
+                                <span class="badge bg-dark border border-secondary text-secondary">
+                                    {{ ev.file_type }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="hash-text" title="{{ ev.sha256_hash }}">{{ ev.sha256_hash[:16] }}...</span>
+                                <button class="btn btn-sm btn-link p-0 text-secondary ms-1" onclick="copyToClipboard('{{ ev.sha256_hash }}', this)" title="Copy SHA-256">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                            </td>
+                            <td><span class="text-muted small text-truncate d-inline-block" style="max-width: 180px;">{{ ev.acquisition_source or 'Examiner Upload' }}</span></td>
+                            <td>
+                                <span class="badge {{ 'bg-success' if ev.status == 'Analyzed' else 'bg-warning text-dark' }}">
+                                    {{ ev.status }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="fw-bold text-white">{{ ev.record_count }}</span>
+                            </td>
+                            <td>
+                                <div class="d-flex gap-1">
+                                    <form action="{{ url_for('reprocess_evidence', evidence_id=ev.id) }}" method="POST">
+                                        <button type="submit" class="btn btn-sm btn-forensic-outline py-0 px-2" title="Re-analyze records">
+                                            <i class="fas fa-redo-alt text-accent"></i>
+                                        </button>
+                                    </form>
+                                    <a href="{{ url_for('integrity_page') }}" class="btn btn-sm btn-forensic-outline py-0 px-2" title="Audit integrity">
+                                        <i class="fas fa-shield-alt text-success"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="9" class="text-center py-5 text-muted">
+                            <i class="fas fa-inbox fs-2 mb-2 d-block"></i>
+                            No evidence files ingested for this investigation yet. Upload an evidence file above or click "Ingest Sample Evidence".
+                        </td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

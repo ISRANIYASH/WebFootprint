@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+{% block title %}Downloads – WebFootprint Forensics{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h3 class="fw-bold text-white mb-1">
+            <i class="fas fa-download text-warning me-2"></i>Download History & Payload Artifact Analyzer
+        </h3>
+        <p class="text-secondary small mb-0">
+            Recovered file downloads, target storage paths, origin domains, and potential execution payload risks.
+        </p>
+    </div>
+    <div class="d-flex gap-2">
+        <a href="{{ url_for('export_csv_route', export_type='downloads') }}" class="btn btn-sm btn-forensic-outline">
+            <i class="fas fa-file-csv me-1"></i> Export Downloads CSV
+        </a>
+    </div>
+</div>
+
+<!-- Filter Bar -->
+<div class="card-forensic mb-4">
+    <div class="card-body-forensic py-3">
+        <form method="GET" action="{{ url_for('downloads_page') }}" class="row g-2 align-items-center">
+            <div class="col-md-5">
+                <input type="text" name="q" class="form-control form-control-forensic" placeholder="Search filename or source URL..." value="{{ search_query }}">
+            </div>
+            <div class="col-md-3">
+                <select name="category" class="form-select-forensic w-100">
+                    <option value="">All File Categories</option>
+                    <option value="exe" {% if cat_filter == 'exe' %}selected{% endif %}>Executables (.exe, .msi, .bat)</option>
+                    <option value="doc" {% if cat_filter == 'doc' %}selected{% endif %}>Documents (.pdf, .docx, .xlsx)</option>
+                    <option value="archive" {% if cat_filter == 'archive' %}selected{% endif %}>Archives (.zip, .rar, .tar)</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select name="status" class="form-select-forensic w-100">
+                    <option value="">All Statuses</option>
+                    <option value="Complete" {% if status_filter == 'Complete' %}selected{% endif %}>Complete</option>
+                    <option value="Cancelled" {% if status_filter == 'Cancelled' %}selected{% endif %}>Cancelled</option>
+                    <option value="Interrupted" {% if status_filter == 'Interrupted' %}selected{% endif %}>Interrupted</option>
+                </select>
+            </div>
+            <div class="col-md-2 d-flex gap-2">
+                <button type="submit" class="btn btn-sm btn-forensic-primary flex-grow-1">
+                    <i class="fas fa-filter me-1"></i> Filter
+                </button>
+                <a href="{{ url_for('downloads_page') }}" class="btn btn-sm btn-forensic-outline">Reset</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Downloads Table -->
+<div class="card-forensic">
+    <div class="card-header-forensic">
+        <h6 class="card-title-forensic">
+            <i class="fas fa-file-download"></i> Recovered Download Records ({{ downloads|length }})
+        </h6>
+        <div class="d-flex align-items-center gap-2">
+            <input type="text" class="form-control form-control-forensic table-search-input" data-table-id="downloadsTable" placeholder="Instant table search..." style="width: 200px;">
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-forensic mb-0" id="downloadsTable">
+            <thead>
+                <tr>
+                    <th>Filename</th>
+                    <th>Source Domain & URL</th>
+                    <th>File Size</th>
+                    <th>Risk Category</th>
+                    <th>Start Time (UTC)</th>
+                    <th>Status</th>
+                    <th>Local Target Path</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if downloads %}
+                    {% for dl in downloads %}
+                        <tr>
+                            <td>
+                                <div class="fw-bold text-white">
+                                    {% if dl.danger_type == 'High' or dl.filename.endswith('.exe') or dl.filename.endswith('.msi') %}
+                                        <i class="fas fa-file-excel text-danger me-1"></i>
+                                    {% elif dl.filename.endswith('.pdf') %}
+                                        <i class="fas fa-file-pdf text-danger me-1"></i>
+                                    {% elif dl.filename.endswith('.zip') or dl.filename.endswith('.rar') %}
+                                        <i class="fas fa-file-archive text-warning me-1"></i>
+                                    {% else %}
+                                        <i class="fas fa-file-alt text-primary me-1"></i>
+                                    {% endif %}
+                                    {{ dl.filename }}
+                                </div>
+                            </td>
+                            <td>
+                                <div class="text-accent small fw-bold">{{ dl.source_domain }}</div>
+                                <div class="url-truncate text-muted small" style="max-width: 260px;" title="{{ dl.source_url }}">
+                                    {{ dl.source_url }}
+                                </div>
+                            </td>
+                            <td>
+                                <span class="badge bg-dark border border-secondary text-white font-monospace">
+                                    {{ (dl.file_size / 1024)|round(1) }} KB
+                                </span>
+                            </td>
+                            <td>
+                                {% if dl.danger_type == 'High' or dl.filename.endswith('.exe') or dl.filename.endswith('.msi') %}
+                                    <span class="badge-risk badge-risk-high"><i class="fas fa-radiation"></i> Binary / Script</span>
+                                {% elif dl.danger_type == 'Medium' or dl.filename.endswith('.zip') or dl.filename.endswith('.xlsm') %}
+                                    <span class="badge-risk badge-risk-medium"><i class="fas fa-box-open"></i> Archive / Macro</span>
+                                {% else %}
+                                    <span class="badge-risk badge-risk-normal"><i class="fas fa-check"></i> Standard File</span>
+                                {% endif %}
+                            </td>
+                            <td><span class="text-secondary small font-monospace">{{ dl.start_time }}</span></td>
+                            <td>
+                                <span class="badge {{ 'bg-success' if dl.download_status == 'Complete' else 'bg-warning text-dark' }}">
+                                    {{ dl.download_status }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="text-muted small font-monospace text-truncate d-inline-block" style="max-width: 220px;" title="{{ dl.file_path }}">
+                                    {{ dl.file_path }}
+                                </span>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="7" class="text-center py-5 text-muted">
+                            <i class="fas fa-inbox fs-2 mb-2 d-block"></i>
+                            No download records extracted matching current search parameters.
+                        </td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

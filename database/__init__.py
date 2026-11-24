@@ -1,0 +1,1 @@
+# WebFootprint Database Package

@@ -1,0 +1,221 @@
+{% extends "base.html" %}
+{% block title %}Website Analysis – WebFootprint Forensics{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h3 class="fw-bold text-white mb-1">
+            <i class="fas fa-chart-pie text-accent me-2"></i>Website Activity & Pattern Analysis
+        </h3>
+        <p class="text-secondary small mb-0">
+            Statistical aggregation of web domain frequency, habitual repetition, initial access points, and temporal trends.
+        </p>
+    </div>
+</div>
+
+<!-- First & Last Visited Cards -->
+<div class="row g-4 mb-4">
+    <div class="col-md-6">
+        <div class="stat-card stat-accent">
+            <div class="stat-icon">
+                <i class="fas fa-play-circle"></i>
+            </div>
+            <div class="overflow-hidden">
+                <div class="stat-label">Initial Site Visited in Evidence Period</div>
+                {% if summary.first_visited %}
+                    <div class="fw-bold text-white text-truncate" title="{{ summary.first_visited.domain }}">
+                        {{ summary.first_visited.domain }}
+                    </div>
+                    <div class="text-muted small text-truncate">{{ summary.first_visited.page_title }}</div>
+                    <div class="text-accent small font-monospace mt-1"><i class="fas fa-clock me-1"></i>{{ summary.first_visited.last_visit_time }} UTC</div>
+                {% else %}
+                    <div class="text-muted small">No visit data recorded.</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="stat-card stat-warning">
+            <div class="stat-icon">
+                <i class="fas fa-flag-checkered"></i>
+            </div>
+            <div class="overflow-hidden">
+                <div class="stat-label">Most Recent Site Visited in Evidence Period</div>
+                {% if summary.last_visited %}
+                    <div class="fw-bold text-white text-truncate" title="{{ summary.last_visited.domain }}">
+                        {{ summary.last_visited.domain }}
+                    </div>
+                    <div class="text-muted small text-truncate">{{ summary.last_visited.page_title }}</div>
+                    <div class="text-warning small font-monospace mt-1"><i class="fas fa-clock me-1"></i>{{ summary.last_visited.last_visit_time }} UTC</div>
+                {% else %}
+                    <div class="text-muted small">No visit data recorded.</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Row -->
+<div class="row g-4 mb-4">
+    <div class="col-lg-8">
+        <div class="card-forensic h-100">
+            <div class="card-header-forensic">
+                <h6 class="card-title-forensic">
+                    <i class="fas fa-chart-line"></i> Total Browsing Volume Per Day
+                </h6>
+                <span class="badge bg-dark border border-secondary text-secondary small">Timeline Aggregate</span>
+            </div>
+            <div class="card-body-forensic">
+                <div style="height: 260px;">
+                    <canvas id="dailyActivityChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card-forensic h-100">
+            <div class="card-header-forensic">
+                <h6 class="card-title-forensic">
+                    <i class="fas fa-clock"></i> Peak Activity by Hour (UTC)
+                </h6>
+            </div>
+            <div class="card-body-forensic">
+                <div style="height: 260px;">
+                    <canvas id="hourlyActivityChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Tables: Most Visited & Repeated Visits -->
+<div class="row g-4 mb-4">
+    <div class="col-lg-6">
+        <div class="card-forensic h-100">
+            <div class="card-header-forensic">
+                <h6 class="card-title-forensic">
+                    <i class="fas fa-fire text-danger"></i> Most Frequently Visited Domains (Top 10)
+                </h6>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-forensic mb-0">
+                    <thead>
+                        <tr>
+                            <th>Domain</th>
+                            <th>Total Visits</th>
+                            <th>Distinct URLs</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if summary.most_visited %}
+                            {% for m in summary.most_visited %}
+                                <tr>
+                                    <td class="fw-semibold text-white">
+                                        <i class="fas fa-globe text-accent me-1"></i> {{ m.domain }}
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-primary text-white">{{ m.visits }}</span>
+                                    </td>
+                                    <td><span class="text-secondary small">{{ m.url_count }} pages</span></td>
+                                </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr><td colspan="3" class="text-center py-3 text-muted">No records available.</td></tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="card-forensic h-100">
+            <div class="card-header-forensic">
+                <h6 class="card-title-forensic">
+                    <i class="fas fa-redo-alt text-primary"></i> Repeated Website Engagements
+                </h6>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-forensic mb-0">
+                    <thead>
+                        <tr>
+                            <th>Domain</th>
+                            <th>Visits</th>
+                            <th>Distinct Pages</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if summary.repeat_visits %}
+                            {% for r in summary.repeat_visits %}
+                                <tr>
+                                    <td class="fw-semibold text-white">
+                                        <i class="fas fa-bookmark text-primary me-1"></i> {{ r.domain }}
+                                    </td>
+                                    <td><span class="badge bg-dark border border-secondary text-accent">{{ r.visits }}</span></td>
+                                    <td><span class="text-secondary small">{{ r.distinct_pages }}</span></td>
+                                </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr><td colspan="3" class="text-center py-3 text-muted">No repeated visits recorded.</td></tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Least Frequently Visited (Anomalous Single-Visit Domains) -->
+<div class="card-forensic">
+    <div class="card-header-forensic">
+        <h6 class="card-title-forensic">
+            <i class="fas fa-compass text-warning"></i> Single-Visit / Transient Web Domains (Sample)
+        </h6>
+        <span class="badge bg-dark border border-secondary text-secondary small">Visit Count = 1</span>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-forensic mb-0">
+            <thead>
+                <tr>
+                    <th>Domain</th>
+                    <th>Sample Page Title</th>
+                    <th>Visit Count</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if summary.least_visited %}
+                    {% for lv in summary.least_visited %}
+                        <tr>
+                            <td class="text-white"><i class="fas fa-external-link-alt text-secondary me-1"></i> {{ lv.domain }}</td>
+                            <td class="text-secondary small">{{ lv.sample_title or 'Untitled Page' }}</td>
+                            <td><span class="badge bg-dark border border-secondary text-muted">1</span></td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr><td colspan="3" class="text-center py-3 text-muted">No single-visit records found.</td></tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    <div class="card-footer bg-transparent border-top border-secondary py-2">
+        <small class="text-muted">
+            <i class="fas fa-info-circle me-1"></i> <strong>Forensic Note:</strong> Single-visit domains often represent ad-trackers, redirections, or one-off searches. High repetition indicates routine operational or personal workflows.
+        </small>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const dailyDates = {{ daily_dates | tojson | safe }};
+    const dailyCounts = {{ daily_counts | tojson | safe }};
+    ForensicsCharts.initDailyActivityChart('dailyActivityChart', dailyDates, dailyCounts);
+
+    const hourlyLabels = {{ hourly_labels | tojson | safe }};
+    const hourlyData = {{ hourly_data | tojson | safe }};
+    ForensicsCharts.initHourlyActivityChart('hourlyActivityChart', hourlyLabels, hourlyData);
+});
+</script>
+{% endblock %}

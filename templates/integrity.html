@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+{% block title %}Evidence Integrity & Chain of Custody – WebFootprint Forensics{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h3 class="fw-bold text-white mb-1">
+            <i class="fas fa-link text-success me-2"></i>Evidence Integrity & Chain of Custody
+        </h3>
+        <p class="text-secondary small mb-0">
+            Cryptographic SHA-256 hash verification, tamper detection, and legal chain of custody audit logging.
+        </p>
+    </div>
+</div>
+
+<!-- Active Evidence Items & Re-verification Panel -->
+<div class="card-forensic mb-4">
+    <div class="card-header-forensic">
+        <h6 class="card-title-forensic">
+            <i class="fas fa-shield-alt"></i> Active Evidence Files & Cryptographic Auditing
+        </h6>
+        <span class="badge bg-dark border border-success text-success small"><i class="fas fa-lock me-1"></i>SHA-256 Protected</span>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-forensic mb-0">
+            <thead>
+                <tr>
+                    <th>Evidence ID</th>
+                    <th>Filename</th>
+                    <th>Acquisition Hash (Baseline)</th>
+                    <th>Current File Status</th>
+                    <th>Acquisition Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if evidence_files %}
+                    {% for ev in evidence_files %}
+                        <tr>
+                            <td><span class="badge bg-dark border border-primary text-primary fw-bold">{{ ev.id }}</span></td>
+                            <td class="fw-semibold text-white">
+                                <i class="fas fa-file-code text-accent me-1"></i> {{ ev.original_filename }}
+                            </td>
+                            <td>
+                                <span class="hash-text" title="{{ ev.sha256_hash }}">{{ ev.sha256_hash }}</span>
+                                <button class="btn btn-sm btn-link p-0 text-secondary ms-1" onclick="copyToClipboard('{{ ev.sha256_hash }}', this)" title="Copy SHA-256">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                            </td>
+                            <td>
+                                <span class="badge bg-success text-white">
+                                    <i class="fas fa-check-circle me-1"></i> Preserved Read-Only
+                                </span>
+                            </td>
+                            <td><span class="text-muted small font-monospace">{{ ev.upload_timestamp[:16] }}</span></td>
+                            <td>
+                                <form action="{{ url_for('verify_evidence_route', evidence_id=ev.id) }}" method="POST" class="d-inline">
+                                    <button type="submit" class="btn btn-sm btn-forensic-primary py-1 px-3">
+                                        <i class="fas fa-redo-alt me-1"></i> Re-Verify Hash Now
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="6" class="text-center py-4 text-muted">No evidence files currently assigned to this case.</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Chain of Custody Audit Log Table -->
+<div class="card-forensic">
+    <div class="card-header-forensic">
+        <h6 class="card-title-forensic">
+            <i class="fas fa-file-contract"></i> Chain of Custody Activity Audit Register ({{ logs|length }} Entries)
+        </h6>
+        <div class="d-flex align-items-center gap-2">
+            <input type="text" class="form-control form-control-forensic table-search-input" data-table-id="custodyTable" placeholder="Filter audit trail..." style="width: 200px;">
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-forensic mb-0" id="custodyTable">
+            <thead>
+                <tr>
+                    <th>Entry ID</th>
+                    <th>Evidence ID</th>
+                    <th>Artifact Name</th>
+                    <th>Action Performed</th>
+                    <th>Investigator</th>
+                    <th>Original SHA-256</th>
+                    <th>Audit Status</th>
+                    <th>Audit Timestamp (UTC)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if logs %}
+                    {% for l in logs %}
+                        <tr>
+                            <td><span class="text-muted small">#{{ l.id }}</span></td>
+                            <td><span class="badge bg-dark border border-secondary text-primary">{{ l.evidence_id }}</span></td>
+                            <td class="text-white small fw-bold">{{ l.evidence_filename }}</td>
+                            <td>
+                                <div class="text-white small fw-semibold">{{ l.action_performed }}</div>
+                                <div class="text-muted small text-truncate" style="max-width: 240px;">{{ l.action_details }}</div>
+                            </td>
+                            <td><span class="text-secondary small">{{ l.investigator_name }}</span></td>
+                            <td>
+                                <span class="hash-text" title="{{ l.original_sha256 }}">{{ l.original_sha256[:12] }}...</span>
+                            </td>
+                            <td>
+                                {% if l.verification_status == 'Verified' %}
+                                    <span class="badge bg-success text-white">
+                                        <i class="fas fa-shield-alt me-1"></i> Verified
+                                    </span>
+                                {% elif l.verification_status == 'Mismatch / Tampered' %}
+                                    <span class="badge bg-danger text-white">
+                                        <i class="fas fa-exclamation-triangle me-1"></i> Tampered / Mismatch
+                                    </span>
+                                {% else %}
+                                    <span class="badge bg-warning text-dark">{{ l.verification_status }}</span>
+                                {% endif %}
+                            </td>
+                            <td><span class="text-secondary small font-monospace">{{ l.timestamp }}</span></td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="8" class="text-center py-5 text-muted">
+                            <i class="fas fa-clipboard-list fs-2 mb-2 d-block"></i>
+                            No chain of custody logs found for this case.
+                        </td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    <div class="card-footer bg-transparent border-top border-secondary py-3">
+        <small class="text-muted">
+            <i class="fas fa-gavel text-accent me-1"></i> <strong>Forensic Principle:</strong> ISO/IEC 27037 dictates that digital evidence must have an unbroken chain of custody with reproducible cryptographic verification to be admissible in a court of law.
+        </small>
+    </div>
+</div>
+{% endblock %}

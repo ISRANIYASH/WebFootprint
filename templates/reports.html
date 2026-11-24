@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% block title %}Forensic Reports – WebFootprint Forensics{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h3 class="fw-bold text-white mb-1">
+            <i class="fas fa-file-pdf text-danger me-2"></i>Forensic Investigation Report & Data Export
+        </h3>
+        <p class="text-secondary small mb-0">
+            Generate formal court-grade PDF examination reports and raw evidence CSV datasets for case archival.
+        </p>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <!-- PDF Report Generator Card -->
+    <div class="col-lg-6">
+        <div class="card-forensic h-100">
+            <div class="card-header-forensic">
+                <h6 class="card-title-forensic">
+                    <i class="fas fa-file-pdf text-danger"></i> Official Forensic Examination Report (PDF)
+                </h6>
+                <span class="badge bg-danger text-white">Court-Grade Format</span>
+            </div>
+            <div class="card-body-forensic">
+                <p class="text-secondary small mb-3">
+                    Produces a signed digital forensics report containing complete executive summaries, SHA-256 cryptographic baselines, domain activity tables, suspicious heuristic findings, and examination limitations.
+                </p>
+
+                <div class="p-3 rounded border border-secondary mb-4" style="background: rgba(17, 24, 39, 0.5);">
+                    <div class="small fw-bold text-white mb-2"><i class="fas fa-check-circle text-success me-1"></i> Report Inclusions:</div>
+                    <ul class="text-muted small mb-0 ps-3">
+                        <li>Case Metadata & Lead Investigator Credentials</li>
+                        <li>Evidence File Registry & Ingestion SHA-256 Hashes</li>
+                        <li>Decoded Browser Artifacts & Frequency Metrics</li>
+                        <li>Heuristic Threat Classifications & Trigger Explanations</li>
+                        <li>Payload & Download Artifact Assessments</li>
+                        <li>Timeline Sample & Digital Forensics Legal Disclaimer</li>
+                    </ul>
+                </div>
+
+                <form action="{{ url_for('download_pdf_report') }}" method="POST">
+                    <button type="submit" class="btn btn-danger w-100 py-2 fw-semibold">
+                        <i class="fas fa-file-download me-2"></i> Generate & Download PDF Report
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- CSV Data Exports Card -->
+    <div class="col-lg-6">
+        <div class="card-forensic h-100">
+            <div class="card-header-forensic">
+                <h6 class="card-title-forensic">
+                    <i class="fas fa-file-csv text-success"></i> Granular Tabular CSV Data Exports
+                </h6>
+                <span class="badge bg-dark border border-secondary text-secondary">Raw Evidence Dumps</span>
+            </div>
+            <div class="card-body-forensic">
+                <p class="text-secondary small mb-3">
+                    Export un-truncated extracted forensic records in standardized CSV format for external spreadsheet modeling, cross-tool correlation, or evidence archives.
+                </p>
+
+                <div class="d-flex flex-column gap-2 mb-3">
+                    <a href="{{ url_for('export_csv_route', export_type='history') }}" class="btn btn-forensic-outline text-start d-flex justify-content-between align-items-center">
+                        <span><i class="fas fa-globe text-primary me-2"></i> Browser History Records</span>
+                        <span class="badge bg-dark border border-secondary text-muted"><i class="fas fa-download me-1"></i> .CSV</span>
+                    </a>
+                    <a href="{{ url_for('export_csv_route', export_type='downloads') }}" class="btn btn-forensic-outline text-start d-flex justify-content-between align-items-center">
+                        <span><i class="fas fa-download text-warning me-2"></i> Download Records & Metadata</span>
+                        <span class="badge bg-dark border border-secondary text-muted"><i class="fas fa-download me-1"></i> .CSV</span>
+                    </a>
+                    <a href="{{ url_for('export_csv_route', export_type='suspicious') }}" class="btn btn-forensic-outline text-start d-flex justify-content-between align-items-center">
+                        <span><i class="fas fa-shield-virus text-danger me-2"></i> Suspicious URLs & Heuristics</span>
+                        <span class="badge bg-dark border border-secondary text-muted"><i class="fas fa-download me-1"></i> .CSV</span>
+                    </a>
+                    <a href="{{ url_for('export_csv_route', export_type='timeline') }}" class="btn btn-forensic-outline text-start d-flex justify-content-between align-items-center">
+                        <span><i class="fas fa-stream text-accent me-2"></i> Chronological Timeline Events</span>
+                        <span class="badge bg-dark border border-secondary text-muted"><i class="fas fa-download me-1"></i> .CSV</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Report Summary Preview Card -->
+<div class="card-forensic">
+    <div class="card-header-forensic">
+        <h6 class="card-title-forensic">
+            <i class="fas fa-eye"></i> Active Case Summary Snapshot: {{ current_investigation.id if current_investigation else 'N/A' }}
+        </h6>
+    </div>
+    <div class="card-body-forensic">
+        <div class="row g-3">
+            <div class="col-md-3">
+                <div class="text-secondary small fw-bold">Case Title:</div>
+                <div class="text-white fw-bold">{{ current_investigation.title if current_investigation else 'No Active Case' }}</div>
+            </div>
+            <div class="col-md-3">
+                <div class="text-secondary small fw-bold">Lead Examiner:</div>
+                <div class="text-white">{{ current_investigation.investigator_name if current_investigation else 'N/A' }}</div>
+            </div>
+            <div class="col-md-3">
+                <div class="text-secondary small fw-bold">Evidence Artifacts:</div>
+                <div class="text-accent fw-bold">{{ stats.total_evidence or 0 }} Files Ingested</div>
+            </div>
+            <div class="col-md-3">
+                <div class="text-secondary small fw-bold">Total History Visits:</div>
+                <div class="text-success fw-bold">{{ stats.total_visits or 0 }} Visits Recorded</div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

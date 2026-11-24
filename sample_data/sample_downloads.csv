@@ -1,0 +1,9 @@
+filename,file_path,source_url,start_time,end_time,download_status,file_size,mime_type
+python-3.12.2-amd64.exe,C:\Users\suspect\Downloads\python-3.12.2-amd64.exe,https://www.python.org/ftp/python/3.12.2/python-3.12.2-amd64.exe,2026-11-19 02:28:48,2026-11-19 02:28:48,Complete,25482912,application/x-msdownload
+NIST.SP.800-86.pdf,C:\Users\suspect\Downloads\NIST.SP.800-86.pdf,https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-86.pdf,2026-11-21 03:16:48,2026-11-21 03:16:48,Complete,1845201,application/pdf
+q4_financial_statement.xlsx,C:\Users\suspect\Documents\q4_financial_statement.xlsx,https://internal-portal.corp.com/reports/q4_financial_statement.xlsx,2026-11-22 06:33:48,2026-11-22 06:33:48,Complete,894120,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+invoice_receipt_march2026.pdf.exe,C:\Users\suspect\Downloads\invoice_receipt_march2026.pdf.exe,http://fileshare.malicious-network.cc/dl/invoice_receipt_march2026.pdf.exe,2026-11-24 14:26:48,2026-11-24 14:26:48,Complete,348160,application/x-msdownload
+dropper_payload.exe,C:\Users\suspect\Downloads\dropper_payload.exe,http://185.220.101.5/downloads/dropper_payload.exe,2026-11-22 14:53:48,2026-11-22 14:53:48,Complete,524288,application/octet-stream
+quarterly_budget_macro.xlsm,C:\Users\suspect\Downloads\quarterly_budget_macro.xlsm,http://external-partner-consulting.net/files/quarterly_budget_macro.xlsm,2026-11-23 01:08:48,2026-11-23 01:08:48,Complete,1205840,application/vnd.ms-excel.sheet.macroEnabled.12
+system_patch_update.msi,C:\Users\suspect\AppData\Local\Temp\system_patch_update.msi,https://tinyurl.com/urgent-security-patch-update,2026-11-24 13:23:48,2026-11-24 13:23:48,Complete,4194304,application/x-msi
+backup_archive.zip,C:\Users\suspect\Downloads\backup_archive.zip,https://github.com/torvalds/linux/archive/refs/heads/master.zip,2026-11-20 07:08:48,2026-11-20 07:08:48,Complete,245102000,application/zip

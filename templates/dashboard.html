@@ -1,0 +1,274 @@
+{% extends "base.html" %}
+{% block title %}Dashboard – WebFootprint Forensics{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h3 class="fw-bold text-white mb-1">
+            <i class="fas fa-microchip text-accent me-2"></i>Forensic Investigation Dashboard
+        </h3>
+        <p class="text-secondary small mb-0">
+            Real-time digital forensics telemetry, browser artifact aggregates, and threat indicators.
+        </p>
+    </div>
+    <div class="d-flex gap-2">
+        <a href="{{ url_for('evidence_page') }}" class="btn btn-sm btn-forensic-primary">
+            <i class="fas fa-upload me-1"></i> Ingest Evidence
+        </a>
+        <a href="{{ url_for('reports_page') }}" class="btn btn-sm btn-forensic-outline">
+            <i class="fas fa-file-pdf me-1"></i> Export Report
+        </a>
+    </div>
+</div>
+
+<!-- Key Stat Cards -->
+<div class="row g-3 mb-4">
+    <div class="col-xl-2 col-md-4 col-sm-6">
+        <div class="stat-card stat-accent">
+            <div class="stat-icon">
+                <i class="fas fa-hdd"></i>
+            </div>
+            <div>
+                <div class="stat-value">{{ stats.total_evidence or 0 }}</div>
+                <div class="stat-label">Evidence Files</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-2 col-md-4 col-sm-6">
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-eye"></i>
+            </div>
+            <div>
+                <div class="stat-value">{{ stats.total_visits or 0 }}</div>
+                <div class="stat-label">Total Visits</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-2 col-md-4 col-sm-6">
+        <div class="stat-card stat-success">
+            <div class="stat-icon">
+                <i class="fas fa-globe"></i>
+            </div>
+            <div>
+                <div class="stat-value">{{ stats.unique_domains or 0 }}</div>
+                <div class="stat-label">Unique Domains</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-2 col-md-4 col-sm-6">
+        <div class="stat-card stat-warning">
+            <div class="stat-icon">
+                <i class="fas fa-download"></i>
+            </div>
+            <div>
+                <div class="stat-value">{{ stats.total_downloads or 0 }}</div>
+                <div class="stat-label">Downloads</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-2 col-md-4 col-sm-6">
+        <div class="stat-card stat-danger">
+            <div class="stat-icon">
+                <i class="fas fa-shield-virus"></i>
+            </div>
+            <div>
+                <div class="stat-value">{{ stats.total_suspicious or 0 }}</div>
+                <div class="stat-label">Suspicious URLs</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-2 col-md-4 col-sm-6">
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-briefcase"></i>
+            </div>
+            <div>
+                <div class="stat-value">{{ all_investigations|length }}</div>
+                <div class="stat-label">Investigations</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Row 1: Activity Timeline & Most Visited Domains -->
+<div class="row g-4 mb-4">
+    <div class="col-lg-7">
+        <div class="card-forensic h-100">
+            <div class="card-header-forensic">
+                <h6 class="card-title-forensic">
+                    <i class="fas fa-chart-area"></i> Browsing Activity Timeline (Daily Trend)
+                </h6>
+                <span class="badge bg-dark border border-secondary text-secondary small">Temporal Analysis</span>
+            </div>
+            <div class="card-body-forensic">
+                <div style="height: 270px;">
+                    <canvas id="dailyActivityChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-5">
+        <div class="card-forensic h-100">
+            <div class="card-header-forensic">
+                <h6 class="card-title-forensic">
+                    <i class="fas fa-chart-bar"></i> Top Visited Web Domains
+                </h6>
+                <span class="badge bg-dark border border-secondary text-secondary small">Access Frequency</span>
+            </div>
+            <div class="card-body-forensic">
+                <div style="height: 270px;">
+                    <canvas id="topDomainsChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Row 2: Distribution Breakdowns & Hourly Heat -->
+<div class="row g-4 mb-4">
+    <div class="col-lg-4">
+        <div class="card-forensic h-100">
+            <div class="card-header-forensic">
+                <h6 class="card-title-forensic">
+                    <i class="fas fa-compass"></i> Browser Engine Distribution
+                </h6>
+            </div>
+            <div class="card-body-forensic">
+                <div style="height: 220px;">
+                    <canvas id="browserDistChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card-forensic h-100">
+            <div class="card-header-forensic">
+                <h6 class="card-title-forensic">
+                    <i class="fas fa-shield-alt"></i> Threat Classification Ratio
+                </h6>
+            </div>
+            <div class="card-body-forensic">
+                <div style="height: 220px;">
+                    <canvas id="riskRatioChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card-forensic h-100">
+            <div class="card-header-forensic">
+                <h6 class="card-title-forensic">
+                    <i class="fas fa-clock"></i> Hourly Activity Distribution
+                </h6>
+            </div>
+            <div class="card-body-forensic">
+                <div style="height: 220px;">
+                    <canvas id="hourlyActivityChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Investigations Section -->
+<div class="card-forensic">
+    <div class="card-header-forensic">
+        <h6 class="card-title-forensic">
+            <i class="fas fa-history"></i> Recent Forensic Investigations & Evidence Status
+        </h6>
+        <a href="{{ url_for('investigations_page') }}" class="btn btn-sm btn-forensic-outline py-0">View All</a>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-forensic mb-0">
+            <thead>
+                <tr>
+                    <th>Investigation ID</th>
+                    <th>Case Title</th>
+                    <th>Lead Investigator</th>
+                    <th>Evidence Filename</th>
+                    <th>Browser Format</th>
+                    <th>Created</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if recent_investigations %}
+                    {% for inv in recent_investigations %}
+                        <tr>
+                            <td><span class="badge bg-dark border border-primary text-primary">{{ inv.id }}</span></td>
+                            <td class="fw-semibold text-white">{{ inv.title }}</td>
+                            <td>{{ inv.investigator_name }}</td>
+                            <td>
+                                {% if inv.evidence_filename %}
+                                    <i class="fas fa-file-code text-accent me-1"></i> {{ inv.evidence_filename }}
+                                {% else %}
+                                    <span class="text-muted fst-italic">Pending Ingestion</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <span class="badge bg-dark border border-secondary text-secondary">
+                                    {{ inv.file_type or 'Multiple / Pending' }}
+                                </span>
+                            </td>
+                            <td><span class="text-muted small">{{ inv.created_at[:16] }}</span></td>
+                            <td>
+                                <span class="badge {{ 'bg-success' if inv.status == 'Active' else 'bg-secondary' }}">
+                                    {{ inv.status }}
+                                </span>
+                            </td>
+                            <td>
+                                <form action="{{ url_for('set_active_investigation') }}" method="POST" class="d-inline">
+                                    <input type="hidden" name="investigation_id" value="{{ inv.id }}">
+                                    <button type="submit" class="btn btn-sm btn-forensic-outline py-0 px-2" title="Switch to this case">
+                                        <i class="fas fa-external-link-alt"></i> Open
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="8" class="text-center py-4 text-muted">
+                            <i class="fas fa-folder-open mb-2 fs-3 d-block"></i>
+                            No investigations found. Click "Load Demo Case" or "New Case" to start.
+                        </td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // 1. Daily Activity Chart Data
+    const dailyDates = {{ daily_dates | tojson | safe }};
+    const dailyCounts = {{ daily_counts | tojson | safe }};
+    ForensicsCharts.initDailyActivityChart('dailyActivityChart', dailyDates, dailyCounts);
+
+    // 2. Top Domains Chart Data
+    const topDomains = {{ top_domains | tojson | safe }};
+    const topVisits = {{ top_visits | tojson | safe }};
+    ForensicsCharts.initTopDomainsChart('topDomainsChart', topDomains, topVisits);
+
+    // 3. Browser Distribution
+    const browserLabels = {{ browser_labels | tojson | safe }};
+    const browserData = {{ browser_data | tojson | safe }};
+    ForensicsCharts.initBrowserDistChart('browserDistChart', browserLabels, browserData);
+
+    // 4. Risk Classification Ratio
+    const riskLabels = {{ risk_labels | tojson | safe }};
+    const riskData = {{ risk_data | tojson | safe }};
+    ForensicsCharts.initRiskRatioChart('riskRatioChart', riskLabels, riskData);
+
+    // 5. Hourly Activity
+    const hourlyLabels = {{ hourly_labels | tojson | safe }};
+    const hourlyData = {{ hourly_data | tojson | safe }};
+    ForensicsCharts.initHourlyActivityChart('hourlyActivityChart', hourlyLabels, hourlyData);
+});
+</script>
+{% endblock %}

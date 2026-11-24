@@ -1,0 +1,399 @@
+{
+  "metadata": {
+    "evidence_type": "Synthetic Demonstration Package",
+    "source": "WebFootprint Forensic Suite",
+    "generated_date": "2026-11-24 17:38:48 UTC",
+    "label": "SYNTHETIC_DEMO_DATA"
+  },
+  "history": [
+    {
+      "url": "https://www.google.com/search?q=sqlite+forensics+tutorial",
+      "title": "sqlite forensics tutorial - Google Search",
+      "visit_count": 14,
+      "typed_count": 6,
+      "last_visit_time": "2026-11-18 08:38:48",
+      "browser_type": "Google Chrome",
+      "transition_type": "Link Click"
+    },
+    {
+      "url": "https://github.com/torvalds/linux",
+      "title": "GitHub - torvalds/linux: Linux kernel source tree",
+      "visit_count": 22,
+      "typed_count": 8,
+      "last_visit_time": "2026-11-18 07:38:48",
+      "browser_type": "Google Chrome",
+      "transition_type": "Link Click"
+    },
+    {
+      "url": "https://stackoverflow.com/questions/1199645/how-to-read-browser-history",
+      "title": "How to read browser history? - Stack Overflow",
+      "visit_count": 8,
+      "typed_count": 2,
+      "last_visit_time": "2026-11-18 06:38:48",
+      "browser_type": "Google Chrome",
+      "transition_type": "Link Click"
+    },
+    {
+      "url": "https://en.wikipedia.org/wiki/Digital_forensics",
+      "title": "Digital forensics - Wikipedia",
+      "visit_count": 18,
+      "typed_count": 4,
+      "last_visit_time": "2026-11-19 03:38:48",
+      "browser_type": "Google Chrome",
+      "transition_type": "Link Click"
+    },
+    {
+      "url": "https://www.python.org/doc/",
+      "title": "Python 3 Documentation",
+      "visit_count": 25,
+      "typed_count": 10,
+      "last_visit_time": "2026-11-19 02:38:48",
+      "browser_type": "Google Chrome",
+      "transition_type": "Link Click"
+    },
+    {
+      "url": "https://docs.github.com/en/rest",
+      "title": "GitHub REST API Documentation",
+      "visit_count": 7,
+      "typed_count": 1,
+      "last_visit_time": "2026-11-19 01:38:48",
+      "browser_type": "Google Chrome",
+      "transition_type": "Link Click"
+    },
+    {
+      "url": "https://news.ycombinator.com/",
+      "title": "Hacker News",
+      "visit_count": 35,
+      "typed_count": 15,
+      "last_visit_time": "2026-11-20 09:38:48",
+      "browser_type": "Google Chrome",
+      "transition_type": "Link Click"
+    },
+    {
+      "url": "https://www.reddit.com/r/cybersecurity/",
+      "title": "Cybersecurity Discussions - Reddit",
+      "visit_count": 19,
+      "typed_count": 5,
+      "last_visit_time": "2026-11-20 05:38:48",
+      "browser_type": "Google Chrome",
+      "transition_type": "Link Click"
+    },
+    {
+      "url": "https://aws.amazon.com/console/",
+      "title": "AWS Management Console",
+      "visit_count": 12,
+      "typed_count": 3,
+      "last_visit_time": "2026-11-20 04:38:48",
+      "browser_type": "Google Chrome",
+      "transition_type": "Link Click"
+    },
+    {
+      "url": "https://www.cloudflare.com/learning/ddos/what-is-ddos-attack/",
+      "title": "What is a DDoS Attack? | Cloudflare",
+      "visit_count": 6,
+      "typed_count": 1,
+      "last_visit_time": "2026-11-20 00:38:48",
+      "browser_type": "Google Chrome",
+      "transition_type": "Link Click"
+    },
+    {
+      "url": "https://medium.com/@forensics/browser-history-investigation-guide",
+      "title": "Browser History Investigation Guide | Medium",
+      "visit_count": 9,
+      "typed_count": 0,
+      "last_visit_time": "2026-11-21 07:38:48",
+      "browser_type": "Google Chrome",
+      "transition_type": "Link Click"
+    },
+    {
+      "url": "https://www.nist.gov/itl/applied-cybersecurity",
+      "title": "Applied Cybersecurity | NIST",
+      "visit_count": 5,
+      "typed_count": 1,
+      "last_visit_time": "2026-11-21 06:38:48",
+      "browser_type": "Google Chrome",
+      "transition_type": "Link Click"
+    },
+    {
+      "url": "https://csrc.nist.gov/publications/detail/sp/800-86/final",
+      "title": "NIST SP 800-86 Guide to Computer Forensics",
+      "visit_count": 11,
+      "typed_count": 2,
+      "last_visit_time": "2026-11-21 03:38:48",
+      "browser_type": "Google Chrome",
+      "transition_type": "Link Click"
+    },
+    {
+      "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP",
+      "title": "An overview of HTTP - MDN Web Docs",
+      "visit_count": 16,
+      "typed_count": 4,
+      "last_visit_time": "2026-11-21 01:38:48",
+      "browser_type": "Google Chrome",
+      "transition_type": "Link Click"
+    },
+    {
+      "url": "https://www.sans.org/blog/digital-forensics-and-incident-response/",
+      "title": "SANS DFIR Blog: Artifact Examination",
+      "visit_count": 8,
+      "typed_count": 0,
+      "last_visit_time": "2026-11-22 08:38:48",
+      "browser_type": "Google Chrome",
+      "transition_type": "Link Click"
+    },
+    {
+      "url": "https://flask.palletsprojects.com/en/stable/",
+      "title": "Welcome to Flask - Flask Documentation",
+      "visit_count": 27,
+      "typed_count": 9,
+      "last_visit_time": "2026-11-22 07:38:48",
+      "browser_type": "Google Chrome",
+      "transition_type": "Link Click"
+    },
+    {
+      "url": "https://chartjs.org/docs/latest/",
+      "title": "Chart.js Documentation",
+      "visit_count": 15,
+      "typed_count": 3,
+      "last_visit_time": "2026-11-22 04:38:48",
+      "browser_type": "Google Chrome",
+      "transition_type": "Link Click"
+    },
+    {
+      "url": "https://getbootstrap.com/docs/5.3/getting-started/introduction/",
+      "title": "Bootstrap v5.3 Documentation",
+      "visit_count": 21,
+      "typed_count": 7,
+      "last_visit_time": "2026-11-22 02:38:48",
+      "browser_type": "Google Chrome",
+      "transition_type": "Link Click"
+    },
+    {
+      "url": "https://www.linkedin.com/feed/",
+      "title": "Feed | LinkedIn",
+      "visit_count": 13,
+      "typed_count": 4,
+      "last_visit_time": "2026-11-23 09:38:48",
+      "browser_type": "Google Chrome",
+      "transition_type": "Link Click"
+    },
+    {
+      "url": "https://mail.google.com/mail/u/0/#inbox",
+      "title": "Gmail - Inbox (1,402)",
+      "visit_count": 48,
+      "typed_count": 20,
+      "last_visit_time": "2026-11-23 08:38:48",
+      "browser_type": "Google Chrome",
+      "transition_type": "Link Click"
+    },
+    {
+      "url": "https://calendar.google.com/calendar/u/0/r",
+      "title": "Google Calendar - Weekly Schedule",
+      "visit_count": 10,
+      "typed_count": 2,
+      "last_visit_time": "2026-11-23 06:38:48",
+      "browser_type": "Google Chrome",
+      "transition_type": "Link Click"
+    },
+    {
+      "url": "https://zoom.us/j/9847291048",
+      "title": "Join Zoom Meeting - Forensic Briefing",
+      "visit_count": 4,
+      "typed_count": 0,
+      "last_visit_time": "2026-11-23 03:38:48",
+      "browser_type": "Google Chrome",
+      "transition_type": "Link Click"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "title": "Rick Astley - Never Gonna Give You Up (Official Music Video)",
+      "visit_count": 5,
+      "typed_count": 0,
+      "last_visit_time": "2026-11-22 23:38:48",
+      "browser_type": "Google Chrome",
+      "transition_type": "Link Click"
+    },
+    {
+      "url": "https://www.nytimes.com/section/technology",
+      "title": "Technology News - The New York Times",
+      "visit_count": 6,
+      "typed_count": 1,
+      "last_visit_time": "2026-11-24 10:38:48",
+      "browser_type": "Google Chrome",
+      "transition_type": "Link Click"
+    },
+    {
+      "url": "https://edition.cnn.com/business",
+      "title": "Business & Markets News - CNN",
+      "visit_count": 7,
+      "typed_count": 2,
+      "last_visit_time": "2026-11-24 09:38:48",
+      "browser_type": "Google Chrome",
+      "transition_type": "Link Click"
+    },
+    {
+      "url": "http://192.168.1.185:8080/admin_portal/login.php?session=bypass",
+      "title": "Internal Gateway Authentication Login",
+      "visit_count": 4,
+      "typed_count": 3,
+      "last_visit_time": "2026-11-19 19:38:48",
+      "browser_type": "Google Chrome",
+      "transition_type": "Link Click"
+    },
+    {
+      "url": "https://paypal-security-account.verify-credentials.top/update_password.php?user=target_victim",
+      "title": "PayPal Security Center: Urgent Verification Required",
+      "visit_count": 3,
+      "typed_count": 1,
+      "last_visit_time": "2026-11-20 18:38:48",
+      "browser_type": "Google Chrome",
+      "transition_type": "Link Click"
+    },
+    {
+      "url": "http://free-gift-airdrop.xyz/claim_reward.php?wallet=0x71C69493f0b2f90a&promo=instant_crypto_cash",
+      "title": "Crypto Airdrop Distribution Claim Free Tokens",
+      "visit_count": 2,
+      "typed_count": 0,
+      "last_visit_time": "2026-11-20 18:38:48",
+      "browser_type": "Google Chrome",
+      "transition_type": "Link Click"
+    },
+    {
+      "url": "https://bit.ly/3xUrK8_confidential_company_salary_leak",
+      "title": "Confidential Salary Report Link",
+      "visit_count": 5,
+      "typed_count": 2,
+      "last_visit_time": "2026-11-22 16:38:48",
+      "browser_type": "Google Chrome",
+      "transition_type": "Link Click"
+    },
+    {
+      "url": "http://185.220.101.5/downloads/dropper_payload.exe",
+      "title": "Direct Binary Download Index",
+      "visit_count": 2,
+      "typed_count": 1,
+      "last_visit_time": "2026-11-22 15:38:48",
+      "browser_type": "Google Chrome",
+      "transition_type": "Link Click"
+    },
+    {
+      "url": "https://portal.bank.secure.auth.credential-check.loan/signin.html?auth_token=8f9a2e&redirect=home",
+      "title": "Online Banking Login Secure Portal",
+      "visit_count": 3,
+      "typed_count": 1,
+      "last_visit_time": "2026-11-23 14:38:48",
+      "browser_type": "Google Chrome",
+      "transition_type": "Link Click"
+    },
+    {
+      "url": "data:text/html;base64,PHNjcmlwdD5hbGVydCgnWFNTSGlqYWNrJyk8L3NjcmlwdD4=",
+      "title": "Embedded Base64 Data Payload",
+      "visit_count": 1,
+      "typed_count": 0,
+      "last_visit_time": "2026-11-23 13:38:48",
+      "browser_type": "Google Chrome",
+      "transition_type": "Link Click"
+    },
+    {
+      "url": "http://xn--gogle-qoa.com/login/authentication?id=49201",
+      "title": "Google Security Checkpoint (Punycode Spoof)",
+      "visit_count": 3,
+      "typed_count": 1,
+      "last_visit_time": "2026-11-24 15:38:48",
+      "browser_type": "Google Chrome",
+      "transition_type": "Link Click"
+    },
+    {
+      "url": "http://fileshare.malicious-network.cc/dl/invoice_receipt_march2026.pdf.exe",
+      "title": "Invoice Viewer and Receipt Downloader",
+      "visit_count": 2,
+      "typed_count": 1,
+      "last_visit_time": "2026-11-24 14:38:48",
+      "browser_type": "Google Chrome",
+      "transition_type": "Link Click"
+    },
+    {
+      "url": "https://tinyurl.com/urgent-security-patch-update",
+      "title": "Windows Urgent Security Update Direct",
+      "visit_count": 4,
+      "typed_count": 2,
+      "last_visit_time": "2026-11-24 13:38:48",
+      "browser_type": "Google Chrome",
+      "transition_type": "Link Click"
+    }
+  ],
+  "downloads": [
+    {
+      "filename": "python-3.12.2-amd64.exe",
+      "file_path": "C:\\Users\\suspect\\Downloads\\python-3.12.2-amd64.exe",
+      "source_url": "https://www.python.org/ftp/python/3.12.2/python-3.12.2-amd64.exe",
+      "start_time": "2026-11-19 02:28:48",
+      "download_status": "Complete",
+      "file_size": 25482912,
+      "mime_type": "application/x-msdownload"
+    },
+    {
+      "filename": "NIST.SP.800-86.pdf",
+      "file_path": "C:\\Users\\suspect\\Downloads\\NIST.SP.800-86.pdf",
+      "source_url": "https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-86.pdf",
+      "start_time": "2026-11-21 03:16:48",
+      "download_status": "Complete",
+      "file_size": 1845201,
+      "mime_type": "application/pdf"
+    },
+    {
+      "filename": "q4_financial_statement.xlsx",
+      "file_path": "C:\\Users\\suspect\\Documents\\q4_financial_statement.xlsx",
+      "source_url": "https://internal-portal.corp.com/reports/q4_financial_statement.xlsx",
+      "start_time": "2026-11-22 06:33:48",
+      "download_status": "Complete",
+      "file_size": 894120,
+      "mime_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    },
+    {
+      "filename": "invoice_receipt_march2026.pdf.exe",
+      "file_path": "C:\\Users\\suspect\\Downloads\\invoice_receipt_march2026.pdf.exe",
+      "source_url": "http://fileshare.malicious-network.cc/dl/invoice_receipt_march2026.pdf.exe",
+      "start_time": "2026-11-24 14:26:48",
+      "download_status": "Complete",
+      "file_size": 348160,
+      "mime_type": "application/x-msdownload"
+    },
+    {
+      "filename": "dropper_payload.exe",
+      "file_path": "C:\\Users\\suspect\\Downloads\\dropper_payload.exe",
+      "source_url": "http://185.220.101.5/downloads/dropper_payload.exe",
+      "start_time": "2026-11-22 14:53:48",
+      "download_status": "Complete",
+      "file_size": 524288,
+      "mime_type": "application/octet-stream"
+    },
+    {
+      "filename": "quarterly_budget_macro.xlsm",
+      "file_path": "C:\\Users\\suspect\\Downloads\\quarterly_budget_macro.xlsm",
+      "source_url": "http://external-partner-consulting.net/files/quarterly_budget_macro.xlsm",
+      "start_time": "2026-11-23 01:08:48",
+      "download_status": "Complete",
+      "file_size": 1205840,
+      "mime_type": "application/vnd.ms-excel.sheet.macroEnabled.12"
+    },
+    {
+      "filename": "system_patch_update.msi",
+      "file_path": "C:\\Users\\suspect\\AppData\\Local\\Temp\\system_patch_update.msi",
+      "source_url": "https://tinyurl.com/urgent-security-patch-update",
+      "start_time": "2026-11-24 13:23:48",
+      "download_status": "Complete",
+      "file_size": 4194304,
+      "mime_type": "application/x-msi"
+    },
+    {
+      "filename": "backup_archive.zip",
+      "file_path": "C:\\Users\\suspect\\Downloads\\backup_archive.zip",
+      "source_url": "https://github.com/torvalds/linux/archive/refs/heads/master.zip",
+      "start_time": "2026-11-20 07:08:48",
+      "download_status": "Complete",
+      "file_size": 245102000,
+      "mime_type": "application/zip"
+    }
+  ]
+}

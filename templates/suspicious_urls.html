@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+{% block title %}Suspicious URLs – WebFootprint Forensics{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h3 class="fw-bold text-white mb-1">
+            <i class="fas fa-shield-virus text-danger me-2"></i>Suspicious URL Heuristic Detection Engine
+        </h3>
+        <p class="text-secondary small mb-0">
+            Rule-based static heuristic inspection for deceptive, high-risk, obfuscated, and non-standard web indicators.
+        </p>
+    </div>
+    <div class="d-flex gap-2">
+        <a href="{{ url_for('export_csv_route', export_type='suspicious') }}" class="btn btn-sm btn-forensic-outline">
+            <i class="fas fa-file-csv me-1"></i> Export Suspicious CSV
+        </a>
+    </div>
+</div>
+
+<!-- Heuristic Overview Banner -->
+<div class="row g-4 mb-4">
+    <div class="col-md-4">
+        <div class="stat-card stat-danger">
+            <div class="stat-icon"><i class="fas fa-skull-crossbones"></i></div>
+            <div>
+                <div class="stat-value">{{ high_risk_count }}</div>
+                <div class="stat-label">High Risk Indicators</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="stat-card stat-warning">
+            <div class="stat-icon"><i class="fas fa-exclamation-triangle"></i></div>
+            <div>
+                <div class="stat-value">{{ medium_risk_count }}</div>
+                <div class="stat-label">Medium Risk Indicators</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="stat-card stat-accent">
+            <div class="stat-icon"><i class="fas fa-tasks"></i></div>
+            <div>
+                <div class="stat-value">{{ total_suspicious }}</div>
+                <div class="stat-label">Total Flagged Artifacts</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Filter Bar -->
+<div class="card-forensic mb-4">
+    <div class="card-body-forensic py-3">
+        <form method="GET" action="{{ url_for('suspicious_urls_page') }}" class="row g-2 align-items-center">
+            <div class="col-md-6">
+                <input type="text" name="q" class="form-control form-control-forensic" placeholder="Search suspicious URL or domain..." value="{{ search_query }}">
+            </div>
+            <div class="col-md-3">
+                <select name="risk" class="form-select-forensic w-100">
+                    <option value="">All Risk Levels</option>
+                    <option value="HIGH RISK" {% if risk_filter == 'HIGH RISK' %}selected{% endif %}>High Risk</option>
+                    <option value="MEDIUM RISK" {% if risk_filter == 'MEDIUM RISK' %}selected{% endif %}>Medium Risk</option>
+                    <option value="LOW RISK" {% if risk_filter == 'LOW RISK' %}selected{% endif %}>Low Risk</option>
+                </select>
+            </div>
+            <div class="col-md-3 d-flex gap-2">
+                <button type="submit" class="btn btn-sm btn-forensic-primary flex-grow-1">
+                    <i class="fas fa-filter me-1"></i> Filter
+                </button>
+                <a href="{{ url_for('suspicious_urls_page') }}" class="btn btn-sm btn-forensic-outline">Reset</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Suspicious Table -->
+<div class="card-forensic">
+    <div class="card-header-forensic">
+        <h6 class="card-title-forensic">
+            <i class="fas fa-bug"></i> Flagged URLs & Heuristic Trigger Rationales ({{ suspicious_records|length }})
+        </h6>
+        <div class="d-flex align-items-center gap-2">
+            <input type="text" class="form-control form-control-forensic table-search-input" data-table-id="suspiciousTable" placeholder="Instant table filter..." style="width: 200px;">
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-forensic mb-0" id="suspiciousTable">
+            <thead>
+                <tr>
+                    <th>Domain / Host</th>
+                    <th>Full Target URL (Defanged)</th>
+                    <th>Risk Level</th>
+                    <th>Score</th>
+                    <th>Detection Reasons & Heuristic Triggers</th>
+                    <th>Detected At</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if suspicious_records %}
+                    {% for s in suspicious_records %}
+                        <tr>
+                            <td class="fw-bold text-white">
+                                <i class="fas fa-exclamation-circle text-warning me-1"></i> {{ s.domain }}
+                            </td>
+                            <td>
+                                <div class="url-truncate text-break font-monospace small" style="max-width: 320px;" title="{{ s.url }}">
+                                    <!-- Defanged URL display -->
+                                    {{ s.url|replace('http://', 'hxxp://')|replace('https://', 'hxxps://') }}
+                                </div>
+                            </td>
+                            <td>
+                                {% if s.risk_level == 'HIGH RISK' %}
+                                    <span class="badge-risk badge-risk-high"><i class="fas fa-skull"></i> HIGH RISK</span>
+                                {% elif s.risk_level == 'MEDIUM RISK' %}
+                                    <span class="badge-risk badge-risk-medium"><i class="fas fa-exclamation-triangle"></i> MEDIUM RISK</span>
+                                {% else %}
+                                    <span class="badge-risk badge-risk-low"><i class="fas fa-info-circle"></i> LOW RISK</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <span class="badge bg-dark border border-secondary text-white">{{ s.heuristic_score }}</span>
+                            </td>
+                            <td>
+                                <ul class="mb-0 ps-3 small text-secondary">
+                                    {% for reason in s.reasons_list %}
+                                        <li>{{ reason }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                            <td><span class="text-muted small font-monospace">{{ s.detected_at[:16] }}</span></td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="6" class="text-center py-5 text-muted">
+                            <i class="fas fa-check-shield text-success fs-2 mb-2 d-block"></i>
+                            No suspicious URLs identified under the current filter thresholds.
+                        </td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    <div class="card-footer bg-transparent border-top border-secondary py-3">
+        <div class="d-flex align-items-center gap-2 small text-muted">
+            <i class="fas fa-balance-scale text-accent fs-5"></i>
+            <div>
+                <strong>Forensic Standard Disclaimer:</strong> This module performs syntactic static heuristic scoring.
+                Flags indicate structural or behavioral anomalies (e.g. IP-based addressing, URL shorteners, brand spoofing keywords)
+                and must be corroborated by the investigator before drawing conclusions of malicious intent. Target links are safely defanged (<code>hxxp://</code>).
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

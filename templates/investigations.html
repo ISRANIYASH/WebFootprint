@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+{% block title %}Investigations – WebFootprint Forensics{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h3 class="fw-bold text-white mb-1">
+            <i class="fas fa-folder-open text-primary me-2"></i>Investigation Case Management
+        </h3>
+        <p class="text-secondary small mb-0">
+            Create, switch, review, and manage forensic cases and multi-device evidence associations.
+        </p>
+    </div>
+    <div class="d-flex gap-2">
+        <button class="btn btn-sm btn-forensic-primary" data-bs-toggle="modal" data-bs-target="#newInvModal">
+            <i class="fas fa-plus-circle me-1"></i> New Investigation
+        </button>
+        <form action="{{ url_for('load_demo_route') }}" method="POST" class="d-inline">
+            <button type="submit" class="btn btn-sm btn-forensic-accent">
+                <i class="fas fa-magic me-1"></i> Load Demo Case
+            </button>
+        </form>
+    </div>
+</div>
+
+<div class="card-forensic mb-4">
+    <div class="card-header-forensic">
+        <h6 class="card-title-forensic">
+            <i class="fas fa-list"></i> Registered Forensic Cases ({{ investigations|length }})
+        </h6>
+        <div class="d-flex align-items-center gap-2">
+            <input type="text" class="form-control form-control-forensic table-search-input" data-table-id="casesTable" placeholder="Filter cases..." style="width: 220px;">
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-forensic mb-0" id="casesTable">
+            <thead>
+                <tr>
+                    <th>Case ID</th>
+                    <th>Investigation Title</th>
+                    <th>Lead Investigator</th>
+                    <th>Evidence Items</th>
+                    <th>Total Records</th>
+                    <th>Created At (UTC)</th>
+                    <th>Status</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if investigations %}
+                    {% for inv in investigations %}
+                        <tr class="{% if current_investigation and current_investigation.id == inv.id %}table-active border-primary{% endif %}">
+                            <td>
+                                <span class="badge bg-dark border border-primary text-primary fw-bold">{{ inv.id }}</span>
+                                {% if current_investigation and current_investigation.id == inv.id %}
+                                    <span class="badge bg-primary text-white ms-1">Active</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="fw-bold text-white">{{ inv.title }}</div>
+                                <div class="text-muted small text-truncate" style="max-width: 280px;">{{ inv.case_description or 'No case notes provided.' }}</div>
+                            </td>
+                            <td>{{ inv.investigator_name }}</td>
+                            <td>
+                                <span class="badge bg-dark border border-secondary text-accent">
+                                    <i class="fas fa-file-alt me-1"></i> {{ inv.evidence_count }} file(s)
+                                </span>
+                            </td>
+                            <td>
+                                <span class="text-secondary fw-semibold">{{ inv.history_count }} visits</span>
+                            </td>
+                            <td><span class="text-muted small">{{ inv.created_at[:16] }}</span></td>
+                            <td>
+                                <span class="badge {{ 'bg-success' if inv.status == 'Active' else 'bg-secondary' }}">
+                                    {{ inv.status }}
+                                </span>
+                            </td>
+                            <td class="text-end">
+                                <form action="{{ url_for('set_active_investigation') }}" method="POST" class="d-inline">
+                                    <input type="hidden" name="investigation_id" value="{{ inv.id }}">
+                                    <button type="submit" class="btn btn-sm btn-forensic-outline py-0 px-2 me-1" title="Set as Active Case">
+                                        <i class="fas fa-check-circle text-primary"></i> Select
+                                    </button>
+                                </form>
+                                <button type="button" class="btn btn-sm btn-outline-danger py-0 px-2" data-bs-toggle="modal" data-bs-target="#deleteInvModal{{ loop.index }}" title="Delete Case">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+
+                                <!-- Delete Modal -->
+                                <div class="modal fade" id="deleteInvModal{{ loop.index }}" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content modal-content-forensic text-start">
+                                            <div class="modal-header modal-header-forensic">
+                                                <h5 class="modal-title text-danger"><i class="fas fa-exclamation-triangle me-2"></i>Delete Investigation</h5>
+                                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p class="text-secondary">Are you sure you want to delete investigation <strong>{{ inv.id }}</strong> ({{ inv.title }})?</p>
+                                                <div class="alert alert-danger py-2 small" style="background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.3);">
+                                                    <i class="fas fa-radiation-alt me-1"></i> Warning: This will permanently purge all associated evidence records, history, downloads, and timeline entries.
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer modal-footer-forensic">
+                                                <button type="button" class="btn btn-sm btn-forensic-outline" data-bs-dismiss="modal">Cancel</button>
+                                                <form action="{{ url_for('delete_investigation', inv_id=inv.id) }}" method="POST" class="d-inline">
+                                                    <button type="submit" class="btn btn-sm btn-danger"><i class="fas fa-trash-alt me-1"></i>Delete Permanently</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="8" class="text-center py-5 text-muted">
+                            <i class="fas fa-folder-open fs-2 mb-2 d-block"></i>
+                            No investigations recorded yet. Click "Create New Case" or "Load Demo Case" to begin.
+                        </td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

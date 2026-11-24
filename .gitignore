@@ -1,0 +1,40 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environments
+venv/
+.venv/
+env/
+ENV/
+
+# Environment Variables & Secrets
+.env
+.env.*
+*.secret
+
+# Local Databases containing runtime/personal/sensitive investigation data
+*.db
+*.sqlite
+*.sqlite3
+!sample_data/*.db
+!sample_data/*.sqlite
+
+# Uploaded evidence and generated reports (runtime evidence files)
+uploads/*
+!uploads/.gitkeep
+generated_reports/*
+!generated_reports/.gitkeep
+
+# Flask instance folder
+instance/
+
+# Operating System & IDE artifacts
+.DS_Store
+Thumbs.db
+*.log
+.vscode/
+.idea/
+*.swp
+*.bak

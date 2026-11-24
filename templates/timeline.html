@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% block title %}Forensic Timeline – WebFootprint Forensics{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h3 class="fw-bold text-white mb-1">
+            <i class="fas fa-stream text-primary me-2"></i>Digital Forensic Activity Timeline
+        </h3>
+        <p class="text-secondary small mb-0">
+            Chronological reconstruction of user browser interactions, downloads, search events, and threat detections.
+        </p>
+    </div>
+    <div class="d-flex gap-2">
+        <a href="{{ url_for('export_csv_route', export_type='timeline') }}" class="btn btn-sm btn-forensic-outline">
+            <i class="fas fa-file-csv me-1"></i> Export Timeline CSV
+        </a>
+    </div>
+</div>
+
+<!-- Filter Bar -->
+<div class="card-forensic mb-4">
+    <div class="card-body-forensic py-3">
+        <form method="GET" action="{{ url_for('timeline_page') }}" class="row g-2 align-items-center">
+            <div class="col-md-4">
+                <input type="text" name="q" class="form-control form-control-forensic" placeholder="Search event title or description..." value="{{ search_query }}">
+            </div>
+            <div class="col-md-3">
+                <select name="type" class="form-select-forensic w-100">
+                    <option value="all">All Event Types</option>
+                    <option value="Website Visited" {% if type_filter == 'Website Visited' %}selected{% endif %}>Website Visited</option>
+                    <option value="Website Revisited" {% if type_filter == 'Website Revisited' %}selected{% endif %}>Website Revisited</option>
+                    <option value="File Downloaded" {% if type_filter == 'File Downloaded' %}selected{% endif %}>File Downloaded</option>
+                    <option value="Suspicious URL Encountered" {% if type_filter == 'Suspicious URL Encountered' %}selected{% endif %}>Suspicious URL Encountered</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select name="date" class="form-select-forensic w-100">
+                    <option value="">All Dates in Evidence Period</option>
+                    {% for d in unique_dates %}
+                        <option value="{{ d.event_date }}" {% if date_filter == d.event_date %}selected{% endif %}>
+                            {{ d.event_date }} ({{ d.count }} events)
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2 d-flex gap-2">
+                <button type="submit" class="btn btn-sm btn-forensic-primary flex-grow-1">
+                    <i class="fas fa-filter me-1"></i> Filter
+                </button>
+                <a href="{{ url_for('timeline_page') }}" class="btn btn-sm btn-forensic-outline">Reset</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Timeline Visualizer -->
+<div class="card-forensic">
+    <div class="card-header-forensic">
+        <h6 class="card-title-forensic">
+            <i class="fas fa-history"></i> Chronological Event Sequence ({{ events|length }} Recorded Actions)
+        </h6>
+        {% if date_filter %}
+            <span class="badge bg-primary text-white">Inspecting Date: {{ date_filter }}</span>
+        {% endif %}
+    </div>
+    <div class="card-body-forensic">
+        {% if events %}
+            <div class="forensic-timeline">
+                {% for ev in events %}
+                    <div class="timeline-item {% if ev.severity == 'Alert' %}alert{% elif ev.severity == 'Warning' %}warning{% endif %}">
+                        <div class="timeline-marker">
+                            {% if ev.event_type == 'File Downloaded' %}
+                                <i class="fas fa-download"></i>
+                            {% elif ev.event_type == 'Suspicious URL Encountered' %}
+                                <i class="fas fa-shield-virus"></i>
+                            {% elif ev.event_type == 'Website Revisited' %}
+                                <i class="fas fa-redo"></i>
+                            {% else %}
+                                <i class="fas fa-globe"></i>
+                            {% endif %}
+                        </div>
+                        <div class="timeline-content">
+                            <div class="timeline-header">
+                                <span class="fw-bold text-white fs-6">
+                                    {{ ev.event_title }}
+                                </span>
+                                <span class="timeline-time">
+                                    <i class="far fa-clock me-1 text-accent"></i> {{ ev.event_timestamp }} UTC
+                                </span>
+                            </div>
+                            <div class="text-secondary small mb-2 text-break">
+                                {{ ev.event_description }}
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge bg-dark border border-secondary text-muted small">
+                                    <i class="fas fa-tag me-1"></i> {{ ev.event_type }}
+                                </span>
+                                <span class="badge bg-dark border border-secondary text-info small">
+                                    {{ ev.source_reference }}
+                                </span>
+                                {% if ev.severity == 'Alert' %}
+                                    <span class="badge bg-danger text-white small">Alert</span>
+                                {% elif ev.severity == 'Warning' %}
+                                    <span class="badge bg-warning text-dark small">Warning</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <i class="fas fa-calendar-times"></i>
+                <h5>No Timeline Events Found</h5>
+                <p>No activity records matched the selected date or event criteria.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

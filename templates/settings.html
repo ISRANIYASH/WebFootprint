@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+{% block title %}System & Ethics – WebFootprint Forensics{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h3 class="fw-bold text-white mb-1">
+            <i class="fas fa-sliders-h text-accent me-2"></i>System Architecture, Configuration & Ethics
+        </h3>
+        <p class="text-secondary small mb-0">
+            Digital forensics compliance baselines, investigator profiles, system status, and forensic methodology.
+        </p>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <!-- System Telemetry Card -->
+    <div class="col-lg-6">
+        <div class="card-forensic h-100">
+            <div class="card-header-forensic">
+                <h6 class="card-title-forensic">
+                    <i class="fas fa-server"></i> System Telemetry & Storage Metrics
+                </h6>
+                <span class="badge bg-dark border border-secondary text-accent small">Active Environment</span>
+            </div>
+            <div class="card-body-forensic">
+                <div class="table-responsive">
+                    <table class="table table-forensic mb-0">
+                        <tbody>
+                            <tr>
+                                <td class="text-secondary">Application Framework</td>
+                                <td class="text-white fw-bold">WebFootprint Suite v2.1.0 (Flask & SQLite)</td>
+                            </tr>
+                            <tr>
+                                <td class="text-secondary">Python Runtime</td>
+                                <td class="text-white font-monospace">{{ python_version }}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-secondary">Database File</td>
+                                <td class="text-white font-monospace small">{{ db_path }}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-secondary">Database Size</td>
+                                <td class="text-white font-monospace">{{ (db_size / 1024)|round(1) }} KB</td>
+                            </tr>
+                            <tr>
+                                <td class="text-secondary">Uploaded Evidence Storage</td>
+                                <td class="text-white font-monospace">{{ (uploads_size / 1024)|round(1) }} KB</td>
+                            </tr>
+                            <tr>
+                                <td class="text-secondary">Report Engine</td>
+                                <td class="text-white">ReportLab 5.1 & NumberedCanvas (Dynamic Two-Pass)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Investigator Profile Card -->
+    <div class="col-lg-6">
+        <div class="card-forensic h-100">
+            <div class="card-header-forensic">
+                <h6 class="card-title-forensic">
+                    <i class="fas fa-id-badge text-primary"></i> Investigator Profile & Lab Credentials
+                </h6>
+            </div>
+            <div class="card-body-forensic">
+                <form action="{{ url_for('update_investigator') }}" method="POST">
+                    <div class="mb-3">
+                        <label class="form-label text-secondary small fw-bold">Examiner Name *</label>
+                        <input type="text" name="name" class="form-control form-control-forensic" value="{{ current_investigator.name if current_investigator else 'Det. S. Vance' }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-secondary small fw-bold">Badge / Examiner ID</label>
+                        <input type="text" name="badge_number" class="form-control form-control-forensic" value="{{ current_investigator.badge_number if current_investigator else 'DF-7402' }}">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-secondary small fw-bold">Law Enforcement / Academic Unit</label>
+                        <input type="text" name="organization" class="form-control form-control-forensic" value="{{ current_investigator.organization if current_investigator else 'Cyber Forensics Unit' }}">
+                    </div>
+                    <button type="submit" class="btn btn-sm btn-forensic-primary">
+                        <i class="fas fa-save me-1"></i> Update Credentials
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Forensic Ethics & Legal Compliance Section -->
+<div class="card-forensic">
+    <div class="card-header-forensic">
+        <h6 class="card-title-forensic">
+            <i class="fas fa-gavel text-warning"></i> Forensic Principles, Ethical Code & Operational Boundaries
+        </h6>
+    </div>
+    <div class="card-body-forensic">
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="p-3 rounded border border-secondary h-100" style="background: rgba(17, 24, 39, 0.4);">
+                    <div class="fw-bold text-white mb-2"><i class="fas fa-shield-alt text-success me-1"></i> 1. Authorized Access Only</div>
+                    <p class="text-secondary small mb-0">
+                        WebFootprint is designed strictly for offline, retrospective analysis of lawfully obtained evidence files (via search warrant, incident response retainer, or academic demonstration). It does not engage in covert surveillance, keylogging, or unauthorized host access.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-3 rounded border border-secondary h-100" style="background: rgba(17, 24, 39, 0.4);">
+                    <div class="fw-bold text-white mb-2"><i class="fas fa-fingerprint text-primary me-1"></i> 2. Evidence Immutability</div>
+                    <p class="text-secondary small mb-0">
+                        All uploaded artifact databases are preserved on disk without mutation. Analysis is conducted over read-only connections and isolated temporary memory representations, maintaining strict compliance with ISO/IEC 27037 standards.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-3 rounded border border-secondary h-100" style="background: rgba(17, 24, 39, 0.4);">
+                    <div class="fw-bold text-white mb-2"><i class="fas fa-search-plus text-accent me-1"></i> 3. Non-Destructive Heuristics</div>
+                    <p class="text-secondary small mb-0">
+                        Suspicious URL evaluation relies on static structural analysis (IP addressing, IDN homoglyphs, deceptive path tokens). The application never visits or executes target remote URLs, preventing active tracking and malware detonations.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

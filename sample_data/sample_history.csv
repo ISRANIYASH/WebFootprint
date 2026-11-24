@@ -1,0 +1,36 @@
+url,page_title,visit_count,typed_count,last_visit_time,browser_type,transition_type
+https://www.google.com/search?q=sqlite+forensics+tutorial,sqlite forensics tutorial - Google Search,14,6,2026-11-18 08:38:48,Google Chrome,Typed URL
+https://github.com/torvalds/linux,GitHub - torvalds/linux: Linux kernel source tree,22,8,2026-11-18 07:38:48,Google Chrome,Typed URL
+https://stackoverflow.com/questions/1199645/how-to-read-browser-history,How to read browser history? - Stack Overflow,8,2,2026-11-18 06:38:48,Google Chrome,Link Click
+https://en.wikipedia.org/wiki/Digital_forensics,Digital forensics - Wikipedia,18,4,2026-11-19 03:38:48,Google Chrome,Typed URL
+https://www.python.org/doc/,Python 3 Documentation,25,10,2026-11-19 02:38:48,Microsoft Edge,Typed URL
+https://docs.github.com/en/rest,GitHub REST API Documentation,7,1,2026-11-19 01:38:48,Microsoft Edge,Link Click
+https://news.ycombinator.com/,Hacker News,35,15,2026-11-20 09:38:48,Microsoft Edge,Typed URL
+https://www.reddit.com/r/cybersecurity/,Cybersecurity Discussions - Reddit,19,5,2026-11-20 05:38:48,Microsoft Edge,Typed URL
+https://aws.amazon.com/console/,AWS Management Console,12,3,2026-11-20 04:38:48,Google Chrome,Link Click
+https://www.cloudflare.com/learning/ddos/what-is-ddos-attack/,What is a DDoS Attack? | Cloudflare,6,1,2026-11-20 00:38:48,Google Chrome,Link Click
+https://medium.com/@forensics/browser-history-investigation-guide,Browser History Investigation Guide | Medium,9,0,2026-11-21 07:38:48,Microsoft Edge,Link Click
+https://www.nist.gov/itl/applied-cybersecurity,Applied Cybersecurity | NIST,5,1,2026-11-21 06:38:48,Microsoft Edge,Link Click
+https://csrc.nist.gov/publications/detail/sp/800-86/final,NIST SP 800-86 Guide to Computer Forensics,11,2,2026-11-21 03:38:48,Microsoft Edge,Link Click
+https://developer.mozilla.org/en-US/docs/Web/HTTP,An overview of HTTP - MDN Web Docs,16,4,2026-11-21 01:38:48,Google Chrome,Typed URL
+https://www.sans.org/blog/digital-forensics-and-incident-response/,SANS DFIR Blog: Artifact Examination,8,0,2026-11-22 08:38:48,Google Chrome,Link Click
+https://flask.palletsprojects.com/en/stable/,Welcome to Flask - Flask Documentation,27,9,2026-11-22 07:38:48,Microsoft Edge,Typed URL
+https://chartjs.org/docs/latest/,Chart.js Documentation,15,3,2026-11-22 04:38:48,Microsoft Edge,Link Click
+https://getbootstrap.com/docs/5.3/getting-started/introduction/,Bootstrap v5.3 Documentation,21,7,2026-11-22 02:38:48,Microsoft Edge,Typed URL
+https://www.linkedin.com/feed/,Feed | LinkedIn,13,4,2026-11-23 09:38:48,Microsoft Edge,Typed URL
+https://mail.google.com/mail/u/0/#inbox,"Gmail - Inbox (1,402)",48,20,2026-11-23 08:38:48,Google Chrome,Typed URL
+https://calendar.google.com/calendar/u/0/r,Google Calendar - Weekly Schedule,10,2,2026-11-23 06:38:48,Google Chrome,Link Click
+https://zoom.us/j/9847291048,Join Zoom Meeting - Forensic Briefing,4,0,2026-11-23 03:38:48,Google Chrome,Link Click
+https://www.youtube.com/watch?v=dQw4w9WgXcQ,Rick Astley - Never Gonna Give You Up (Official Music Video),5,0,2026-11-22 23:38:48,Microsoft Edge,Link Click
+https://www.nytimes.com/section/technology,Technology News - The New York Times,6,1,2026-11-24 10:38:48,Google Chrome,Link Click
+https://edition.cnn.com/business,Business & Markets News - CNN,7,2,2026-11-24 09:38:48,Microsoft Edge,Link Click
+http://192.168.1.185:8080/admin_portal/login.php?session=bypass,Internal Gateway Authentication Login,4,3,2026-11-19 19:38:48,Google Chrome,Link Click
+https://paypal-security-account.verify-credentials.top/update_password.php?user=target_victim,PayPal Security Center: Urgent Verification Required,3,1,2026-11-20 18:38:48,Microsoft Edge,Link Click
+http://free-gift-airdrop.xyz/claim_reward.php?wallet=0x71C69493f0b2f90a&promo=instant_crypto_cash,Crypto Airdrop Distribution Claim Free Tokens,2,0,2026-11-20 18:38:48,Google Chrome,Link Click
+https://bit.ly/3xUrK8_confidential_company_salary_leak,Confidential Salary Report Link,5,2,2026-11-22 16:38:48,Microsoft Edge,Link Click
+http://185.220.101.5/downloads/dropper_payload.exe,Direct Binary Download Index,2,1,2026-11-22 15:38:48,Google Chrome,Link Click
+https://portal.bank.secure.auth.credential-check.loan/signin.html?auth_token=8f9a2e&redirect=home,Online Banking Login Secure Portal,3,1,2026-11-23 14:38:48,Microsoft Edge,Link Click
+"data:text/html;base64,PHNjcmlwdD5hbGVydCgnWFNTSGlqYWNrJyk8L3NjcmlwdD4=",Embedded Base64 Data Payload,1,0,2026-11-23 13:38:48,Microsoft Edge,Link Click
+http://xn--gogle-qoa.com/login/authentication?id=49201,Google Security Checkpoint (Punycode Spoof),3,1,2026-11-24 15:38:48,Microsoft Edge,Link Click
+http://fileshare.malicious-network.cc/dl/invoice_receipt_march2026.pdf.exe,Invoice Viewer and Receipt Downloader,2,1,2026-11-24 14:38:48,Google Chrome,Link Click
+https://tinyurl.com/urgent-security-patch-update,Windows Urgent Security Update Direct,4,2,2026-11-24 13:38:48,Google Chrome,Link Click

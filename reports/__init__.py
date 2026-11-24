@@ -1,0 +1,1 @@
+# WebFootprint Report Generation Package
