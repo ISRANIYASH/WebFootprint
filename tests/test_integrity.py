@@ -16,6 +16,8 @@ class TestIntegrityChecker(unittest.TestCase):
         init_db()
 
     def tearDown(self):
+        with db_session() as conn:
+            conn.execute("DELETE FROM investigations WHERE id = 'INV-TEST-001'")
         for f in os.listdir(self.temp_dir):
             try:
                 os.remove(os.path.join(self.temp_dir, f))

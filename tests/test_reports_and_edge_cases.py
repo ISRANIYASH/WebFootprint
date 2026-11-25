@@ -17,6 +17,11 @@ class TestReportsAndRoutes(unittest.TestCase):
         cls.client = app.test_client()
         cls.client.testing = True
 
+    @classmethod
+    def tearDownClass(cls):
+        with db_session() as conn:
+            conn.execute("DELETE FROM investigations WHERE id IN ('INV-EMPTY-TEST', 'INV-CSV-TEST')")
+
     def test_empty_investigation_report_pdf(self):
         empty_inv_id = "INV-EMPTY-TEST"
         with db_session() as conn:

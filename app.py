@@ -49,8 +49,13 @@ def get_current_investigation_id():
             if cursor.fetchone():
                 return active_id
 
-        # Fallback to latest investigation
-        cursor.execute("SELECT id FROM investigations ORDER BY created_at DESC LIMIT 1")
+        # Fallback to investigation with evidence, or latest investigation
+        cursor.execute("""
+            SELECT i.id 
+            FROM investigations i 
+            ORDER BY (SELECT COUNT(*) FROM evidence_files WHERE investigation_id = i.id) DESC, i.created_at DESC 
+            LIMIT 1
+        """)
         row = cursor.fetchone()
         if row:
             session['active_investigation_id'] = row['id']
